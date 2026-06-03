@@ -1,7 +1,8 @@
 const mongoose = require('mongoose')
+require('dotenv').config();
 
 mongoose
-    .connect('mongodb://127.0.0.1:27017/project1')
+    .connect(process.env.atlas_URL)
     .then(function () { console.log('connected') })
     .catch(function (err) { console.log(err) })
     

@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express')
 const app = express()
 const cors = require('cors')
@@ -6,6 +7,7 @@ const applicationRouter = require('./routes/applicationRoute')
 const noteRouter = require('./routes/noteRoute')
 const db = require('./config/database-configuration')
 const cookieParser = require('cookie-parser')
+const PORT = process.env.PORT || 3000;
 
 app.use(cors({
     origin: 'http://localhost:5173',
@@ -20,4 +22,4 @@ app.use('/user', userRouter)
 app.use('/application', applicationRouter)
 app.use('/notes', noteRouter )
 
-app.listen(3000, () => console.log("Server started"))
+app.listen(PORT, () => console.log("Server started"))
