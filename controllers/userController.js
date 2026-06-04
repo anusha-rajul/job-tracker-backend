@@ -13,8 +13,13 @@ async function registerUser(req, res) {
         password: hash
     })
        
-    const token = jwt.sign({ email: user.email, userId: user._id }, 'anything')
-    res.cookie('token', token)
+    const token = jwt.sign({ email: user.email, userId: user._id }, process.env.JWT_SECRET)
+    res.cookie('token', token, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+  maxAge: 7 * 24 * 60 * 60 * 1000
+})
     return res.json({ success: true, message:'Registered Successfully', user })
     } catch (error) {
         return res.json({success:false, message: error.message})
@@ -37,11 +42,14 @@ async function loginUser(req, res) {
             return res.json({success: false, message: 'Password not matched'})
         }
 
-        const token = jwt.sign({ email: user.email, userId: user._id }, 'anything')
+        const token = jwt.sign({ email: user.email, userId: user._id }, process.env.JWT_SECRET)
 
             res.cookie('token', token, {
-            httpOnly: true
-            })
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+  maxAge: 7 * 24 * 60 * 60 * 1000
+})
         
         return res.json({success: true, message: 'Login Successful' })
         
@@ -57,7 +65,7 @@ async function isLoggedIn(req, res, next) {
     if (!token) {
         return res.json({success: false, message:'Login first'})
     }
-    let data = jwt.verify(token, 'anything');
+    let data = jwt.verify(token, process.env.JWT_SECRET);
     req.user = data;
     next()
    } catch (error) {
