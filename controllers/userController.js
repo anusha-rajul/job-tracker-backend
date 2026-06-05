@@ -6,7 +6,12 @@ const jwt = require('jsonwebtoken')
 async function registerUser(req, res) {
     try {
         const { name, email, password } = req.body;
-    const hash = await hashPassword(password)
+        const hash = await hashPassword(password)
+        let userInDb = await userModel.findOne({ email: email })
+        if (userInDb) {
+            console.log('same email')
+            return res.json({ success: false, message: 'User already exists with this email' })   
+        }
     let user = await userModel.create({
         name, 
         email,
@@ -63,7 +68,7 @@ async function isLoggedIn(req, res, next) {
    try {
      let token = req.cookies.token;
     if (!token) {
-        return res.json({success: false, message:'Login first'})
+        return res.json({success: false, message:'User not logged in'})
     }
     let data = jwt.verify(token, process.env.JWT_SECRET);
     req.user = data;

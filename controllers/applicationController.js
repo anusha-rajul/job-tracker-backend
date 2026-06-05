@@ -30,7 +30,7 @@ async function getApplication(req, res) {
         return res.json({success: false, message:'Need to login'})      
     } else {
         let applications = await applicationModel.find({user: req.user.userId})
-        return res.json({success: true, applications})
+        return res.json({success: true , applications})
     }
 }
 

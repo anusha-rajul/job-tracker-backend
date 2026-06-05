@@ -14,7 +14,7 @@ router.get('/logout', (req, res) => {
   sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
   maxAge: 7 * 24 * 60 * 60 * 1000
 });
-    return res.json({success: true, message:'Logout'})
+    return res.json({success: true, message:'Logged out'})
 })
 
 router.get('/dashboard', isLoggedIn, async (req, res) => {

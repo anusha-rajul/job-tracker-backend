@@ -30,7 +30,7 @@ async function getNotes(req, res) {
     let notes = await noteModel.find({application: applicationId})
     res.json({success: true, notes})
    } catch (error) {
-    res.json({message: error})
+    res.json({success:false, message: error})
    }
 }
 
@@ -41,7 +41,7 @@ async function deleteNote(req, res) {
         if (!notes) {
             return res.json({success: false})
         }
-        res.json({ success: true, message: 'delete' })
+        res.json({ success: true, message: 'Note deleted' })
     } catch (error) {
         return res.json({success: false})
     }
@@ -56,7 +56,7 @@ async function editNote(req, res) {
     }, { new: true })
       res.json({success:true, message:'updated', note})
   } catch (error) {
-    
+    res.json({success: false, message:error})
   }
 }
 
